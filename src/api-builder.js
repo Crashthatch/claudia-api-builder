@@ -40,7 +40,7 @@ module.exports = function ApiBuilder(components) {
 		isThenable = function (param) {
 			return param && param.then && (typeof param.then === 'function');
 		},
-		routeEvent = function (event, context /*, callback*/) {
+		routeEvent = function (event, context , callback) {
 			var handler, result, path;
 			context.callbackWaitsForEmptyEventLoop = false;
 			if (event && event.context && event.context.path && event.context.method) {
@@ -52,6 +52,7 @@ module.exports = function ApiBuilder(components) {
 				if (handler) {
 					try {
 						event.lambdaContext = context;
+						event.lambdaCallback = callback;
 						result = handler(event);
 						if (isThenable(result)) {
 							return result.then(function (promiseResult) {
